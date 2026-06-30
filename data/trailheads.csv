@@ -1,0 +1,38 @@
+trailhead_id,name,lat,lon,elev_ft,winter_gate_miles_add,notes
+quandary_th,Quandary / McCullough Gulch,39.3839,-106.0731,10850,0.0,Cristo Couloir from Blue Lakes dam; East Ridge from Hwy 9 lot.
+kite_lake,Kite Lake (DeCaLiBron),39.3289,-106.1283,12000,3.0,Road to Kite Lake closed in winter/spring; start near Alma adds miles.
+fourmile_sherman,Fourmile Creek (Sherman),39.2008,-106.1689,12000,2.0,Iowa Gulch / Fourmile; upper road often gated.
+stevens_gulch,Stevens Gulch (Grays/Torreys),39.6601,-105.7866,11280,3.0,Bakerville road off I-70 unplowed; adds ~3 mi each way.
+guanella_pass,Guanella Pass (Bierstadt),39.5966,-105.711,11669,0.0,Pass plowed from Georgetown side most of season.
+echo_lake,Echo Lake (Blue Sky/Evans),39.6566,-105.5972,10600,4.0,Mt. Evans Rd closed; long approach to Summit Lake bowls.
+longs_th,Longs Peak TH,40.2719,-105.557,9400,0.0,"RMNP; ski lines (Keplinger's/Notch) are late-season, high consequence."
+crags_pikes,Crags / Devils Playground (Pikes),38.8731,-105.0986,10100,1.0,Pikes ski descents are rare/marginal; continuity poor.
+black_cloud,Black Cloud / SE Elbert,39.0719,-106.4128,10160,0.0,South/Box Creek approaches to Elbert east lines.
+massive_th,Mt. Massive TH (North Halfmoon),39.1525,-106.4775,10400,0.0,Halfmoon road; SE/East faces.
+north_cottonwood,North Cottonwood (Harvard/Columbia),38.9217,-106.2542,9900,0.0,Shared TH for Harvard and Columbia.
+la_plata_th,La Plata TH (Hwy 82),39.0719,-106.4767,10160,0.0,NW Couloir / Ellingwood Ridge access.
+baldwin_gulch,Baldwin Gulch (Antero),38.6678,-106.2469,10700,4.0,Long 4WD road to Antero; gated low in season.
+blank_gulch,Blank Gulch (Shavano/Tabeguache),38.6172,-106.1875,9600,0.0,Angel of Shavano TH; shared for the Shavano/Tabeguache linkup.
+princeton_towers,Mt. Princeton Radio Towers,38.74,-106.185,10800,5.0,Road to towers usually gated; long road walk in winter.
+denny_creek,Denny Creek (Yale),38.8231,-106.3325,9900,0.0,Yale SW/East slopes.
+missouri_gulch,Missouri Gulch (Belford/Oxford/Missouri),38.9583,-106.3656,9650,0.0,Shared TH for the Belford/Oxford/Missouri linkup.
+south_winfield,South Winfield (Huron),38.9783,-106.44,10260,4.0,Winfield road gated; adds road miles in winter.
+half_moon,Half Moon (Holy Cross),39.4669,-106.3839,10320,2.0,Tigiwon road gated; Cross Couloir is a committing N line.
+nellie_creek,Nellie Creek (Uncompahgre),38.0717,-107.4011,11400,5.0,4WD road gated; long approach in season.
+matterhorn_creek,Matterhorn Creek (Wetterhorn),38.0461,-107.5147,10400,2.0,Wetterhorn SE/East; rocky summit block.
+yankee_boy,Yankee Boy Basin (Sneffels),37.9942,-107.7536,11300,4.0,Camp Bird road gated; Snake/Birthday couloirs.
+silver_creek,Silver Creek (Redcloud/Sunshine),37.9389,-107.4314,10400,3.0,Cinnamon Pass road; shared for Redcloud/Sunshine linkup.
+american_basin,American Basin (Handies),37.9264,-107.5042,11300,3.0,Handies E/SW; Cinnamon Pass access.
+stewart_creek,Stewart Creek (San Luis),38.0033,-106.9258,10500,0.0,"Long, remote NE-slope approach."
+needleton,Needleton (Chicago Basin),37.6492,-107.69,8200,0.0,Access historically via Durango-Silverton train; multi-day basecamp for Eolus/Sunlight/Windom. Train schedule is its own constraint.
+navajo_lake,Navajo Lake / Kilpacker (Mt. Wilson),37.8333,-108.0667,9340,2.0,Mt. Wilson N Face / Boxcar.
+rock_of_ages,Rock of Ages (Wilson Peak),37.8336,-107.9836,10400,2.0,Wilson Peak SW/W.
+south_colony,South Colony Lakes (Crestones/Humboldt),37.9786,-105.5436,9900,3.0,2WD lot; 4WD road gated. Shared for Crestone Peak/Needle and Humboldt.
+willow_lake,Willow Creek (Kit Carson/Challenger),37.9817,-105.6011,8900,0.0,From Crestone town; Outward Bound Couloir basin.
+lake_como,Lake Como road (Blanca massif),37.5772,-105.4889,8000,0.0,Infamous brutal road; long approach to Blanca/Ellingwood/Little Bear.
+lily_lake,Lily Lake / Huerfano (Lindsey),37.6258,-105.4847,10780,3.0,Huerfano road gated; NW gully.
+cielo_vista,Cielo Vista Ranch (Culebra),37.1222,-105.1869,9800,0.0,"PRIVATE access -- must pre-book a ranch permit; not a walk-up. Access, not avalanche, is often the binding constraint here."
+maroon_lake,Maroon Lake (Bells/Pyramid),39.0989,-106.9403,9580,6.0,Maroon Creek road closed at T-Lazy-7 in season; long approach. Shared for Maroon/North Maroon and (separately) Pyramid.
+snowmass_creek,Snowmass Creek (Snowmass Mtn),39.1431,-107.0589,8400,0.0,Long valley approach; East Face / S Face.
+capitol_creek,Capitol Creek (Capitol),39.2042,-107.0883,9420,2.0,Capitol Lake basin; N Face / K2 ridge -- the hardest objective.
+castle_creek,Castle Creek / Montezuma Basin (Castle),39.0586,-106.8617,9800,4.0,Montezuma road gated; NE couloir.

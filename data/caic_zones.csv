@@ -1,0 +1,11 @@
+zone_id,display_name,region,used_in_seed,notes
+steamboat_flattops,Steamboat & Flat Tops,Northern Mountains,0,No 14ers in this zone; included for completeness.
+front_range,Front Range,Front Range,1,Grays/Torreys/Bierstadt/Blue Sky/Longs. Pikes Peak is on the far south edge and is only loosely covered by CAIC -- flagged unverified.
+vail_summit,Vail & Summit County,Central Mountains,1,Quandary (Tenmile) and Mt. of the Holy Cross (Sawatch/Vail fringe).
+sawatch,Sawatch,Central Mountains,1,"Sawatch Range plus the Mosquito/DeCaLiBron group, which CAIC folds into this zone."
+aspen,Aspen,Central Mountains,1,"Elk Range: Maroon Bells, Pyramid, Snowmass, Capitol, Castle."
+gunnison,Gunnison,Central Mountains,0,Borders the Elk and San Juan ranges; no 54 peak assigned here in seed.
+grand_mesa,Grand Mesa,Central Mountains,0,No 14ers; included for completeness.
+north_san_juan,North San Juan,Southern Mountains,1,Sneffels/Ouray/Silverton/Telluride peaks AND the Needle Mtns (Chicago Basin). The Needles are geographically south but operationally nearest this zone -- flagged unverified.
+south_san_juan,South San Juan,Southern Mountains,0,Wolf Creek/Pagosa; no 54 peak falls here in seed.
+sangre_de_cristo,Sangre de Cristo,Southern Mountains,1,"Crestones/Kit Carson/Humboldt, Blanca massif, Lindsey, Culebra."
