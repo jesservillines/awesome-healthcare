@@ -6,26 +6,45 @@ weather data, to estimate the **theoretical fastest possible season** for past
 winters. Benchmark to beat: Josh Jespersen's 2017 run (~138 days, Jan 3 – May
 21).
 
-## Status — Phase 1 (domain model + seed data)
+## Status — Phases 1–2 (domain model + conditions contracts)
 
-This is the first slice of the [build plan](#build-order). It ships only the
-data model and the seed datasets; the conditions adapters, go/no-go engine,
+Built so far (see the [build plan](#build-order)); the go/no-go engine,
 scheduler, and reports come in later phases.
 
 ```
 fkt_sim/peaks.py        # Peak / Line / Aspect / GatekeeperTier + CSV loaders
-data/peaks_seed.csv     # the 54-peak Davenport ski list (deduped, see below)
+fkt_sim/conditions.py   # conditions contracts, provider interface,
+                        #   SyntheticProvider (offline default) + real adapter stubs
+data/peaks_seed.csv     # the 55-objective ski list (deduped, see below)
 data/caic_zones.csv     # the 10 real CAIC backcountry forecast zones
 data/trailheads.csv     # approximate trailhead coordinates
+tests/fixtures/synthetic_season.py   # canned good/bad/average seasons
 tests/test_peaks_load.py
+tests/test_conditions.py
 ```
 
 Run the tests:
 
 ```bash
 pip install -r requirements.txt
-python -m pytest tests/test_peaks_load.py -q
+python -m pytest tests/ -q
 ```
+
+### Conditions (Phase 2)
+
+`conditions.py` defines the typed records the go/no-go engine consumes
+(`CaicForecast` with an aspect/elevation `DangerRose` + named `AvalancheProblem`s,
+`AvalancheObs`, `StationWeather`) bundled per `(zone, date)` as `DayConditions`.
+The data-provenance rules of Section 7 are baked in: every record carries
+`source` + `retrieved_at`; a forecast missing its rose is `degraded=True` and
+falls back to the overall rating; a missing forecast is **UNKNOWN, not GO**.
+
+The default data source is `SyntheticProvider` — a fully deterministic offline
+season generator keyed by snowpack **character** (`CONTINENTAL_PWL`,
+`NEAR_NORMAL`, `STABLE_EARLY`), not depth. Real `CaicForecastAdapter` /
+`AvalancheExplorerAdapter` / `SnotelAdapter` skeletons sit behind the same
+`ConditionsProvider` interface and raise `NotImplementedError` until Phase 8 —
+they never return silently-fake data.
 
 ## ⚠️ Data provenance — read before trusting any value
 
