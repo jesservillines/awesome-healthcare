@@ -42,25 +42,26 @@ Trailhead coordinates and `winter_gate_miles_add` are likewise approximate
 seeds. CAIC zone assignments for the Needle Mountains (Chicago Basin) and Pikes
 Peak are operational best-guesses and flagged in `caic_zones.csv`.
 
-## The 58 → 54 dedupe (the #1 review item)
+## The 58 → 55 dedupe
 
 Colorado has **53 ranked** 14ers (≥300 ft prominence). The five *named*
 sub-prominence 14ers are **Mt. Cameron, Conundrum Peak, North Eolus, El Diente
-Peak, and North Maroon Peak**. The canonical "54" that the Davenport /
-Jespersen "ski all 54" projects use is the **53 ranked peaks + North Maroon**.
+Peak, and North Maroon Peak**.
 
-So from the 58-name list (the prompt's seed table, which also contained an
-artifact duplicate `Mt. Princeton…` row) we drop exactly four:
+Per review we **keep both El Diente and North Maroon**. El Diente's standard
+ski descent is the Mt. Wilson ↔ El Diente traverse, so it is bagged in **one
+push** with Mt. Wilson — both share the `wilson_group` cluster and the
+scheduler treats the linkup as a single super-objective governed by its
+strictest member. From the 58-name list (the prompt's seed table, which also
+contained an artifact duplicate `Mt. Princeton…` row) we therefore drop only
+the three trivial bumps:
 
 ```
-DROPPED = { Mt. Cameron, Conundrum Peak, North Eolus, El Diente Peak }
+DROPPED = { Mt. Cameron, Conundrum Peak, North Eolus }
 ```
 
-The one genuinely debatable call is **El Diente vs North Maroon**. We keep
-North Maroon (independent trailhead and ski line) and drop El Diente (its
-standard ski descent is the Mt. Wilson traverse — dependent on Mt. Wilson). If
-review prefers the El-Diente-inclusive list, it's a one-line change in the data
-builder and one row in `peaks_seed.csv`.
+This yields **55 named objectives** — 54 "summits to ski" in the project sense,
+with El Diente + Mt. Wilson counting as a single linked push.
 
 ## Data model notes
 

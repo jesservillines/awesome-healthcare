@@ -187,7 +187,7 @@ def load_peaks(
     trailheads: dict[str, Trailhead] | None = None,
     validate_refs: bool = True,
 ) -> list[Peak]:
-    """Load the 54-peak seed list.
+    """Load the 55-objective seed list (54 summits; El Diente links with Mt. Wilson).
 
     Each CSV row carries a single (primary) seed line, flattened into columns.
     When ``validate_refs`` is True, every peak's ``caic_zone`` and

@@ -13,23 +13,32 @@ from fkt_sim.peaks import (
     load_trailheads,
 )
 
-# The four peaks deliberately dropped from the 58-named list to reach the
-# canonical 54 (53 ranked + North Maroon). See data/build provenance.
-DROPPED_FROM_58 = {"Mt. Cameron", "Conundrum Peak", "North Eolus", "El Diente Peak"}
+# The three trivial bumps dropped from the 58-named list. El Diente and North
+# Maroon are BOTH kept per review; El Diente links with Mt. Wilson as one push.
+DROPPED_FROM_58 = {"Mt. Cameron", "Conundrum Peak", "North Eolus"}
 
 
-def test_exactly_54_unique_peaks():
+def test_exactly_55_unique_peaks():
     peaks = load_peaks()
-    assert len(peaks) == 54
+    assert len(peaks) == 55
     names = [p.name for p in peaks]
-    assert len(set(names)) == 54, "peak names must be unique"
+    assert len(set(names)) == 55, "peak names must be unique"
 
 
 def test_dropped_subpeaks_absent_kept_subpeaks_present():
     names = {p.name for p in load_peaks()}
-    assert names.isdisjoint(DROPPED_FROM_58), "dropped sub-peaks leaked into the 54"
-    # North Maroon is the sub-prominence peak we keep to make the canonical 54.
+    assert names.isdisjoint(DROPPED_FROM_58), "dropped sub-peaks leaked into the list"
+    # Both sub-prominence peaks we keep per review.
     assert "North Maroon Peak" in names
+    assert "El Diente Peak" in names
+
+
+def test_el_diente_linked_with_mt_wilson_in_one_push():
+    clusters = cluster_map(load_peaks())
+    wilson = {p.name for p in clusters["wilson_group"]}
+    assert {"Mt. Wilson", "El Diente Peak"} <= wilson, (
+        "El Diente must share the wilson_group cluster (one push via the traverse)"
+    )
 
 
 def test_every_peak_maps_to_a_real_caic_zone():
