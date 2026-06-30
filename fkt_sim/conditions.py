@@ -364,13 +364,15 @@ class SyntheticProvider(ConditionsProvider):
     def _base_overall(self, zone: str, day: date) -> DangerLevel:
         prog = self._season_progress(day)
         rng = self._rng(zone, day, "danger")
-        # Mid-winter CONSIDERABLE-ish, trending to LOW/MODERATE by late spring.
+        # Mid-winter CONSIDERABLE-ish, stabilizing toward LOW by late spring so a
+        # realistic (rare) corn window opens for steep CRUX lines. The PWL year
+        # stays dangerous much longer -- its late, compressed window is the point.
         if self.character == SeasonCharacter.STABLE_EARLY:
-            base = 2.6 - 1.4 * prog
+            base = 2.6 - 1.8 * prog          # reaches LOW readily late
         elif self.character == SeasonCharacter.CONTINENTAL_PWL:
-            base = 3.1 - 0.9 * prog          # stays dangerous longer
+            base = 3.1 - 1.2 * prog          # still elevated into spring
         else:
-            base = 2.9 - 1.2 * prog
+            base = 2.9 - 1.7 * prog
         if self._is_storm(zone, day):
             base += 1.2                       # storm-day spike
         base += rng.uniform(-0.4, 0.4)
