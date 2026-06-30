@@ -114,8 +114,17 @@ def _window_union(peaks: list[Peak]) -> tuple[str, str]:
     return min(starts), max(ends)
 
 
-# Clusters that realistically need a multi-day basecamp regardless of distance.
-_BASECAMP_CLUSTERS = {"chicago_basin": 3}
+# Clusters that realistically run as a multi-day basecamp: you camp and ski each
+# member on its own good day within the stay, rather than needing one identical
+# day GO for all of them. (True single-day linkups -- DeCaLiBron, Grays/Torreys,
+# Shavano/Tabeguache, Redcloud/Sunshine -- are left at push_days=1.)
+_BASECAMP_CLUSTERS = {
+    "chicago_basin": 3,     # Eolus/Sunlight/Windom -- train + basecamp
+    "blanca_group": 3,      # Blanca/Ellingwood/Little Bear -- Como basin
+    "crestones": 2,         # Crestone Peak/Needle -- South Colony
+    "kit_carson_group": 2,  # Kit Carson/Challenger -- Willow Lake
+    "maroon_bells": 2,      # Maroon/North Maroon -- skied on separate days
+}
 _MULTIDAY_MILES = 20.0
 
 

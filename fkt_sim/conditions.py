@@ -339,6 +339,19 @@ class SyntheticProvider(ConditionsProvider):
         self.degraded_before = degraded_before
         # Explicit (zone, isodate) pairs to leave as UNKNOWN (missing forecast).
         self.unknown_zone_days = unknown_zone_days
+        # Deterministic output -> memoize per (zone, date). The scheduler and
+        # look-ahead re-request the same days thousands of times; without this
+        # the SHA/RNG regeneration dominates runtime.
+        self._fc_cache: dict[tuple[str, str], CaicForecast | None] = {}
+        self._wx_cache: dict[tuple[str, str], StationWeather | None] = {}
+        self._obs_cache: dict[tuple[str, str], list[AvalancheObs]] = {}
+        self._dc_cache: dict[tuple[str, str, int], DayConditions] = {}
+
+    def day_conditions(self, zone: str, day: date, lookback_days: int = 3) -> DayConditions:
+        ckey = (zone, day.isoformat(), lookback_days)
+        if ckey not in self._dc_cache:
+            self._dc_cache[ckey] = super().day_conditions(zone, day, lookback_days)
+        return self._dc_cache[ckey]
 
     # -- deterministic RNG -------------------------------------------------- #
     def _rng(self, zone: str, day: date, salt: str = "") -> random.Random:
@@ -351,11 +364,37 @@ class SyntheticProvider(ConditionsProvider):
         span = (self.end - self.start).days or 1
         return max(0.0, min(1.0, (day - self.start).days / span))
 
+    def _spell_offset(self, zone: str, day: date) -> float:
+        """Multi-day weather persistence: danger moves in spells, not i.i.d. days.
+
+        Real spring weather arrives in stretches -- a multi-day high-pressure
+        window (negative offset; this is when steep CRUX lines get skied) or an
+        unsettled stormy spell (positive). Keyed to a coarse 4-day bucket so
+        consecutive days share the same regime.
+        """
+        spell_len = 4
+        idx = (day - self.start).days // spell_len
+        rng = random.Random(int(hashlib.sha256(
+            f"{self.seed}|{zone}|spell{idx}".encode()).hexdigest()[:16], 16))
+        prog = self._season_progress(day)
+        # Spring favors clearing high-pressure spells; a PWL year less so.
+        clearing_bias = 0.0 if self.character == SeasonCharacter.CONTINENTAL_PWL else 0.25 * prog
+        roll = rng.random()
+        if roll < 0.30 + clearing_bias:
+            return -1.3          # high-pressure window
+        if roll < 0.55 + clearing_bias:
+            return -0.6
+        if roll > 0.85:
+            return 1.0           # unsettled spell
+        return 0.0
+
     def _is_storm(self, zone: str, day: date) -> bool:
-        # Storms cluster ~every 7-10 days; more frequent mid-winter.
+        # Storms cluster within unsettled spells; more frequent mid-winter.
         rng = self._rng(zone, day, "storm")
         prog = self._season_progress(day)
-        base = 0.18 - 0.08 * prog  # storms taper toward spring
+        base = 0.16 - 0.08 * prog  # storms taper toward spring
+        if self._spell_offset(zone, day) > 0:
+            base += 0.25           # unsettled spell -> storms cluster here
         if self.character == SeasonCharacter.STABLE_EARLY:
             base *= 0.6
         return rng.random() < base
@@ -373,13 +412,22 @@ class SyntheticProvider(ConditionsProvider):
             base = 3.1 - 1.2 * prog          # still elevated into spring
         else:
             base = 2.9 - 1.7 * prog
+        base += self._spell_offset(zone, day)  # multi-day persistence
         if self._is_storm(zone, day):
             base += 1.2                       # storm-day spike
-        base += rng.uniform(-0.4, 0.4)
+        base += rng.uniform(-0.3, 0.3)
         return DangerLevel(int(max(1, min(4, round(base)))))
 
     # -- ConditionsProvider API -------------------------------------------- #
     def forecast(self, zone: str, day: date) -> CaicForecast | None:
+        ckey = (zone, day.isoformat())
+        if ckey in self._fc_cache:
+            return self._fc_cache[ckey]
+        result = self._build_forecast(zone, day)
+        self._fc_cache[ckey] = result
+        return result
+
+    def _build_forecast(self, zone: str, day: date) -> CaicForecast | None:
         if (zone, day.isoformat()) in self.unknown_zone_days:
             return None  # genuinely missing -> UNKNOWN day
         if not (self.start <= day <= self.end):
@@ -493,6 +541,14 @@ class SyntheticProvider(ConditionsProvider):
         return out
 
     def _obs_for(self, zone: str, day: date) -> list[AvalancheObs]:
+        ckey = (zone, day.isoformat())
+        if ckey in self._obs_cache:
+            return self._obs_cache[ckey]
+        out = self._build_obs_for(zone, day)
+        self._obs_cache[ckey] = out
+        return out
+
+    def _build_obs_for(self, zone: str, day: date) -> list[AvalancheObs]:
         rng = self._rng(zone, day, "obs")
         fc = self.forecast(zone, day)
         if fc is None:
@@ -523,6 +579,14 @@ class SyntheticProvider(ConditionsProvider):
         return out
 
     def weather(self, zone: str, day: date) -> StationWeather | None:
+        ckey = (zone, day.isoformat())
+        if ckey in self._wx_cache:
+            return self._wx_cache[ckey]
+        result = self._build_weather(zone, day)
+        self._wx_cache[ckey] = result
+        return result
+
+    def _build_weather(self, zone: str, day: date) -> StationWeather | None:
         if not (self.start <= day <= self.end):
             return None
         rng = self._rng(zone, day, "wx")
