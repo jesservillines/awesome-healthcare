@@ -186,7 +186,7 @@ def evaluate_objective(
         return Verdict(
             decision=Decision.NO_GO, peak=missing[0], line="basecamp",
             reasons=[Reason(
-                code=VetoCode.UNKNOWN_DATA, is_veto=True,
+                code=VetoCode.BASECAMP_NO_WINDOW, is_veto=True,
                 detail=f"{len(missing)} basecamp member(s) had no GO day in the "
                        f"{objective.push_days}-day window: {', '.join(missing)}.",
             )],

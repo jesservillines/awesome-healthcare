@@ -6,29 +6,50 @@ weather data, to estimate the **theoretical fastest possible season** for past
 winters. Benchmark to beat: Josh Jespersen's 2017 run (~138 days, Jan 3 – May
 21).
 
-## Status — Phases 1–2 (domain model + conditions contracts)
+## Status — Phases 1–7 complete (synthetic pipeline end-to-end)
 
-Built so far (see the [build plan](#build-order)); the go/no-go engine,
-scheduler, and reports come in later phases.
+The full engine runs offline on synthetic seasons. Only Phase 8 (wiring the real
+CAIC/Explorer/SNOTEL adapters) remains.
 
 ```
 fkt_sim/peaks.py        # Peak / Line / Aspect / GatekeeperTier + CSV loaders
 fkt_sim/conditions.py   # conditions contracts, provider interface,
                         #   SyntheticProvider (offline default) + real adapter stubs
+fkt_sim/gonogo.py       # the five-veto go/no-go engine -> structured Verdict
+fkt_sim/travel.py       # drive-time matrix, cluster objectives, effort/fatigue
+fkt_sim/scheduler.py    # greedy daily step + look-ahead window reservation
+fkt_sim/simulate.py     # season replay loop + three-season backtest
+fkt_sim/report.py       # binding-constraint analysis, floor, fragility, charts
+fkt_sim/cli.py          # entrypoint
 data/peaks_seed.csv     # the 55-objective ski list (deduped, see below)
 data/caic_zones.csv     # the 10 real CAIC backcountry forecast zones
 data/trailheads.csv     # approximate trailhead coordinates
-tests/fixtures/synthetic_season.py   # canned good/bad/average seasons
-tests/test_peaks_load.py
-tests/test_conditions.py
+tests/                  # 80 tests across all phases
 ```
 
-Run the tests:
+Run the tests and a backtest:
 
 ```bash
 pip install -r requirements.txt
 python -m pytest tests/ -q
+python -m fkt_sim.cli --three --fragility            # all three season characters
+python -m fkt_sim.cli --character near_normal --charts-dir out/   # + Gantt/veto PNGs
 ```
+
+### Headline finding (synthetic seasons)
+
+Replaying the engine against the three snowpack characters, **none of the
+synthetic seasons complete all 54**. The binding constraint is consistently the
+steepest, north-facing, summit-discontinuous CRUX lines — Capitol, the Maroon
+Bells, Sneffels' Snake, Holy Cross's Cross Couloir, the Blanca massif (Little
+Bear), Chicago Basin, Lindsey — caught in the real squeeze between *needing deep
+fill* (early season) and *needing LOW danger* (late season). The near-normal
+year gets furthest (~43/55), the deep-persistent-slab year barely progresses,
+and the lean/stable year rocks out the steep lines. This is the honest result
+the model is built to surface: the project's floor is set by a handful of rare
+windows, and the fragility metric shows how much slack a real attempt needs
+around its single best day. (These are synthetic conditions — the point is the
+machinery and the constraint structure, not the specific dates.)
 
 ### Conditions (Phase 2)
 
@@ -96,12 +117,13 @@ with El Diente + Mt. Wilson counting as a single linked push.
 
 ## Build order
 
-1. **`peaks.py` + seed CSVs (this phase).** ← stop for review here
-2. `conditions.py` contracts + a synthetic season fixture (offline pipeline).
-3. `gonogo.py` + tests (each veto path + degraded-data fallback).
-4. `travel.py` (drive-time matrix, clusters, effort budget).
-5. `scheduler.py` (greedy, then look-ahead replanner).
-6. `simulate.py` end-to-end on the synthetic fixture.
-7. `report.py` (Gantt, binding-constraint analysis, fragility).
-8. Wire real CAIC/Explorer/SNOTEL adapters; verify critical-path lines; run
-   three seasons classified by snowpack character.
+1. ✅ `peaks.py` + seed CSVs.
+2. ✅ `conditions.py` contracts + synthetic season fixture (offline pipeline).
+3. ✅ `gonogo.py` + tests (each veto path + degraded-data fallback).
+4. ✅ `travel.py` (drive-time matrix, clusters, effort budget).
+5. ✅ `scheduler.py` (greedy + look-ahead window reservation).
+6. ✅ `simulate.py` end-to-end on the synthetic fixture.
+7. ✅ `report.py` (Gantt, binding-constraint analysis, fragility).
+8. ⬜ Wire real CAIC/Explorer/SNOTEL adapters (skeletons in place, raise until
+   wired); verify critical-path lines; run three real seasons classified by
+   snowpack character.

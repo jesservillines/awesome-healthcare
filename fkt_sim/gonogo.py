@@ -54,6 +54,7 @@ class VetoCode(str, Enum):
     NO_OVERNIGHT_FREEZE = "no_overnight_freeze"
     FROZEN_SOLID = "frozen_solid"
     UNKNOWN_DATA = "unknown_data"
+    BASECAMP_NO_WINDOW = "basecamp_no_window"  # a member had no GO day in the push
 
 
 class Reason(BaseModel):
